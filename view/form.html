@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Form</title>
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5; /* Very light grey background */
+        }
+
+        .upload-box {
+            border: 1px solid rgba(0, 0, 0, 0.1); /* Blurred border */
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            background-color: #fff; /* White box background */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Box shadow for blur effect */
+        }
+
+        form {
+            margin: 0;
+        }
+
+        input[type="file"] {
+            display: none; /* Hide the default file input */
+        }
+
+        .custom-file-input {
+            display: inline-block;
+            background-color: #e0ffe0; /* Lightest green color */
+            color: #006400; /* Dark green text color */
+            padding: 8px 15px; /* Adjusted padding for a smaller button */
+            border: none;
+            border-radius: 5px; /* Rounded corners */
+            cursor: pointer;
+            margin-bottom: 10px; /* Vertical spacing */
+        }
+
+        input[type="submit"] {
+            background-color: #6fbf73; /* Light green color */
+            color: #fff; /* White text color */
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px; /* Rounded corners */
+            cursor: pointer;
+        }
+
+        #image-preview-container {
+            margin-top: 10px;
+            display: none; /* Initially hide the preview container */
+        }
+
+        #image-preview {
+            max-width: 50%;
+            max-height: 0%;
+            background-color: #eee; /* Grey background for the placeholder */
+            border-radius: 5px; /* Rounded corners */
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="upload-box">
+        <form action="/api/v1/upload" method="post" enctype="multipart/form-data" >
+            <input type="hidden" name="authtoken" value="{{.AuthToken}}"/>
+            <label for="file-input" class="custom-file-input">Choose File</label>
+            <input type="file" name="data" id="file-input" onchange="displaySelectedFile(this)"/>
+            <span id="selected-file-name"></span>
+            <br>
+            <input type="submit" value="Upload"/>
+            <div id="image-preview-container">
+                <img id="image-preview" alt="Preview" />
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function displaySelectedFile(input) {
+            const fileNameSpan = document.getElementById('selected-file-name');
+            const imagePreviewContainer = document.getElementById('image-preview-container');
+            const imagePreview = document.getElementById('image-preview');
+
+            const file = input.files[0];
+
+            if (file) {
+                fileNameSpan.textContent = file.name;
+
+                // Display the preview image
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    imagePreview.src = e.target.result;
+                    imagePreviewContainer.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            } else {
+                // Reset the preview if no file is selected
+                fileNameSpan.textContent = '';
+                imagePreview.src = '';
+                imagePreviewContainer.style.display = 'none';
+            }
+        }
+
+        function handleFormSubmission(event) {
+            // event.preventDefault(); // Prevent the default form submission
+            // Add your logic here to handle the form submission and response
+            alert('Form submitted!'); // Example: Display an alert for demonstration purposes
+        }
+    </script>
+</body>
+</html>
