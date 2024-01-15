@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"brankasv1/model"
 	"brankasv1/service"
 	"encoding/json"
 	"net/http"
@@ -24,5 +25,15 @@ func DocumentUploadHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-type", "application/json")
-	json.NewEncoder(w).Encode(document)
+	//json.NewEncoder(w).Encode(document)
+	resp := DocumentUploadResponse{
+		Message: "File Uploaded successfully",
+		Doc:     &document,
+	}
+	json.NewEncoder(w).Encode(resp)
+}
+
+type DocumentUploadResponse struct {
+	Message string          `json:"message"`
+	Doc     *model.Document `json:"doc"`
 }
